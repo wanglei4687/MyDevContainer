@@ -12,7 +12,7 @@
       "cpus": 4
     },
     "mounts": [
-      // "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
+      "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
       "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind"
     ]
   }
