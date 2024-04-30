@@ -1,0 +1,10 @@
+FROM mcr.microsoft.com/vscode/devcontainers/miniconda:0-3
+
+# multi stage:  https://github.com/docker/buildx/issues/805
+
+RUN conda init
+
+RUN sudo apt-get -y update
+RUN sudo apt install -y lsb-release wget software-properties-common gnupg
+
+RUN conda install pytorch torchvision torchaudio cpuonly -c pytorch

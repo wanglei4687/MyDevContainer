@@ -9,6 +9,7 @@
   - <https://github.com/microsoft/vscode-dev-containers/blob/main/containers/debian/.devcontainer/base.Dockerfile>
   - [Pytorch Devcontainer](https://github.com/pytorch/pytorch/blob/main/.devcontainer/Dockerfile)
   - [devcontainer nvidia base](https://github.com/psaboia/devcontainer-nvidia-base)
+  - [multi stage](https://github.com/docker/buildx/issues/805)
 
 create builder
 
@@ -24,4 +25,8 @@ docker buildx build --platform linux/amd64 --load -t wanglei4687/dev-container:c
 
 # push registry 
 docker buildx build --platform linux/amd64 --push -t wanglei4687/dev-container:cuda12 dev/
+```
+
+```shell
+docker buildx build --platform linux/arm64 --load -t wanglei4687/dev-container:cuda12 -f ml/Dockerfile.cpu ml/ 
 ```
