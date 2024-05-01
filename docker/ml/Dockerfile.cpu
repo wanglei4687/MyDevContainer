@@ -1,0 +1,8 @@
+FROM mcr.microsoft.com/vscode/devcontainers/miniconda:0-3
+
+RUN conda init
+
+RUN sudo apt-get -y update
+RUN sudo apt install -y wget software-properties-common gnupg2
+
+RUN conda install pytorch torchvision cpuonly -c pytorch
