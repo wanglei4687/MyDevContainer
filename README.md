@@ -13,3 +13,16 @@
 
 - [Sharing git credentials](https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials)
 - [Sharing ssh keys with devcontainer](https://dmsenter89.github.io/post/23-04-sharing-ssh-keys-with-devcontainer/)
+
+## Dev Containers
+
+### ML
+
+- Cuda(wanglei4687/devcontainers:cuda12) linux/amd64
+  - cuda 12.3
+  - ubuntu22.04
+  - torch torchvision torchaudio
+  - ohmyzsh
+- ML Cpu(wanglei4687/devcontainers:mlcpu) linux/amd64,linux/arm64
+  -  miniconda
+  - torch torchvision
