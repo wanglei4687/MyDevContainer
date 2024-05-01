@@ -7,4 +7,4 @@ RUN conda init
 RUN sudo apt-get -y update
 RUN sudo apt install -y lsb-release wget software-properties-common gnupg
 
-RUN conda install pytorch torchvision torchaudio cpuonly -c pytorch
+RUN conda install pytorch torchvision cpuonly -c pytorch
