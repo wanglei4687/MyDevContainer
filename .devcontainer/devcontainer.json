@@ -1,5 +1,5 @@
 {
-    "name": "Carrier Node Development",
+    "name": "Node Development",
     "image": "wanglei4687/devcontainers:node20",
     "features": {
       "ghcr.io/devcontainers/features/aws-cli:1": {},
