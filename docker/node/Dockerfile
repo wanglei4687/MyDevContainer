@@ -1,11 +1,11 @@
-FROM nvidia/cuda:12.3.2-cudnn9-devel-ubuntu22.04
+FROM ubuntu:22.04
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 ENV TZ=Asia/Shanghai \
-    DEBIAN_FRONTEND=noninteractive
+        DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt upgrade -y 
 
@@ -16,9 +16,11 @@ RUN groupadd --gid $USER_GID $USERNAME \
         && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
         && chmod 0440 /etc/sudoers.d/$USERNAME
 
-RUN apt install -y software-properties-common curl \
-        python3-dev python3-pip python3-wheel python3-setuptools \
-        python3-ipykernel git vim  fonts-powerline zsh gnupg2\
+# default env set to node20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+
+RUN apt install -y software-properties-common curl npm \
+        git vim fonts-powerline zsh gnupg2 nodejs ca-certificates \
         locales \
         # set up locale
         && locale-gen en_US.UTF-8
@@ -31,7 +33,9 @@ RUN apt autoremove -y \
 # generate locale for agnoster
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && /usr/sbin/locale-gen
 
-RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+RUN npm install -g aws-cdk yarn
 
 # the user we're applying this too (otherwise it most likely install for root)
 USER $USERNAME
@@ -53,4 +57,4 @@ RUN sh -c "$(wget -O- https://install.ohmyz.sh/)"
 # RUN cd $HOME && curl -fsSLO https://raw.gitmirror.com/romkatv/dotfiles-public/master/.purepower
 
 # zsh configuration
-ADD ml/.zshrc $HOME
+ADD node/.zshrc $HOME
