@@ -1,9 +1,8 @@
 CONTEXT := docker
-NODEIMAGE := wanglei4687/devcontainers:node20
-NODEDOCKERFILE :=  docker/node/Dockerfile
-PLATFORM := linux/amd64
-CROSSPLATFORM := linux/amd64
-
+NODEIMAGE ?= wanglei4687/devcontainers:node20
+NODEDOCKERFILE ?=  docker/node/Dockerfile
+PLATFORM ?= linux/amd64
+CROSSPLATFORM ?= linux/amd64,linux/arm64
 
 .PHONY: node-load
 node-load:

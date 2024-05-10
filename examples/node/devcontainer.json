@@ -1,5 +1,5 @@
 {
-  "name": "Carrier Node Development",
+  "name": "Node Development",
   "image": "wanglei4687/devcontainers:node20",
   "features": {
     "ghcr.io/devcontainers/features/aws-cli:1": {},
@@ -14,8 +14,10 @@
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
         "Gruntfuggly.todo-tree",
-        "circleci.circleci",
-        "atlassian.atlascode"
+        "ms-azuretools.vscode-docker",
+        "github.vscode-pull-request-github",
+        "Gruntfuggly.todo-tree",
+        "ms-vscode.makefile-tools"
       ]
     }
   },

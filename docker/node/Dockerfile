@@ -3,27 +3,31 @@ FROM ubuntu:22.04
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ARG NODE_VERSION=20
 
 ENV TZ=Asia/Shanghai \
         DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt upgrade -y 
+RUN apt update
 
 RUN groupadd --gid $USER_GID $USERNAME \
         && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-        && apt-get update \
-        && apt-get install -y sudo wget \
+        && apt-get install -y sudo wget curl \
         && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
         && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # default env set to node20
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
 
-RUN apt install -y software-properties-common curl npm \
-        git vim fonts-powerline zsh gnupg2 nodejs ca-certificates \
+RUN apt install nodejs -y
+
+RUN apt install -y software-properties-common aptitude \
+        git vim fonts-powerline zsh gnupg2 ca-certificates \
         locales \
         # set up locale
         && locale-gen en_US.UTF-8
+
+RUN aptitude install npm -y
 
 # Clean up
 RUN apt autoremove -y \
@@ -33,9 +37,11 @@ RUN apt autoremove -y \
 # generate locale for agnoster
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && /usr/sbin/locale-gen
 
-RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-
 RUN npm install -g aws-cdk yarn
+
+RUN node -v
+RUN yarn -v
+RUN cdk --version
 
 # the user we're applying this too (otherwise it most likely install for root)
 USER $USERNAME
