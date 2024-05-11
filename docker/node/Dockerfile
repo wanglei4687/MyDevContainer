@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM debian:latest
 
 ARG USERNAME=vscode
 ARG USER_UID=1000

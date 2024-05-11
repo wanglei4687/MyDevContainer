@@ -20,6 +20,21 @@ cuda-push:
 	$(info ===========================================)
 	@docker buildx build --platform ${PLATFORM} --push -t ${CUDAIMAGE} -f ${CUDADOCKERFILE} ${CONTEXT} 
 
+.PHOONY: cuda-run
+cuda-run:
+	$(info ===========================================)
+	$(info Start Cuda image local...)
+	$(info ===========================================)
+	@docker run -it ${CUDAIMAGE} /bin/zsh
+
+
+.PHONY: cuda-clean
+cuda-clean:
+		$(info ===========================================)
+	$(info Start Cuda image local...)
+	$(info ===========================================)
+	@docker container prune --filter LABEL=NAME="MLCUDA"
+
 .PHONY: mlcpu-load
 mlcpu-load:
 	$(info ===========================================)
@@ -33,3 +48,17 @@ mlcpu-push:
 	$(info Push ML CPU Image to hub...)
 	$(info ===========================================)
 	@docker buildx build --platform ${CROSSPLATFORM} --push -t ${CPUIMAGE} -f ${CPUDOCKERFILE} ${CONTEXT}
+
+.PHONY: mlcpu-run
+mlcpu-run:
+	$(info ===========================================)
+	$(info Start ML CPU Image local...)
+	$(info ===========================================)
+	@docker run -it ${CPUIMAGE} /bin/zsh
+
+.PHONY: mlcpu-clean
+mlcpu-clean:
+	$(info ===========================================)
+	$(info Clean mlcpu container...)
+	$(info ===========================================)
+	@docker container prune --filter LABEL=NAME="MLCPU" 
