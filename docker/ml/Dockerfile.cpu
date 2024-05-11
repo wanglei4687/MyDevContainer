@@ -5,4 +5,4 @@ RUN conda init
 RUN sudo apt-get -y update
 RUN sudo apt install -y wget software-properties-common gnupg2
 
-RUN conda install pytorch torchvision cpuonly -c pytorch
+RUN conda install pytorch ipykernel cpuonly -c pytorch -y
