@@ -35,3 +35,10 @@ clean:
 	$(info Stop Buildx $(BUILDX)...)
 	$(info ===========================================)
 	@docker buildx stop $(BUILDX)
+
+.PHONY: prune
+prune:
+	$(info ===========================================)
+	$(info Clean devcontainers container...)
+	$(info ===========================================)
+	@docker container prune --filter LABEL=SCOPE="DEVCONTAINERS"

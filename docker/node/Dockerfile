@@ -3,45 +3,33 @@ FROM debian:latest
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ARG NODE_VERSION=20
 
 ENV TZ=Asia/Shanghai \
         DEBIAN_FRONTEND=noninteractive
 
-RUN groupadd --gid $USER_GID $USERNAME \
-        && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME 
-
 RUN apt update
 
-RUN apt install -y sudo wget curl software-properties-common \
-        git vim fonts-powerline zsh gnupg2  ca-certificates \
-        apt-transport-https pigz iptables  dirmngr jq \
-        python3-minimal python3-pip libffi-dev python3-venv \
-        build-essential libssl-dev \
+RUN groupadd --gid $USER_GID $USERNAME \
+        && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+        && apt-get install -y sudo wget curl \
+        && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+        && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# default env set to node20
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
+
+RUN apt install nodejs -y
+
+RUN apt install -y software-properties-common aptitude \
+        git vim fonts-powerline zsh gnupg2 ca-certificates \
         locales \
         # set up locale
         && locale-gen en_US.UTF-8
 
 # default env set to node20
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash - 
-RUN apt install -y nodejs
-
-# Set NVM
-RUN mkdir /usr/local/nvm
-ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 10.12.0
-ENV NVM_INSTALL_PATH $NVM_DIR/versions/node/v$NODE_VERSION
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-
-RUN source $NVM_DIR/nvm.sh \
-   && nvm install $NODE_VERSION \
-   && nvm alias default $NODE_VERSION \
-   && nvm use default
-ENV NODE_PATH $NVM_INSTALL_PATH/lib/node_modules
-ENV PATH $NVM_INSTALL_PATH/bin:$PATH
-
-RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-        && chmod 0440 /etc/sudoers.d/$USERNAME
+RUN aptitude install npm -y
 
 # Clean up
 RUN apt autoremove -y \
@@ -52,6 +40,10 @@ RUN apt autoremove -y \
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && /usr/sbin/locale-gen
 
 RUN npm install -g aws-cdk yarn
+
+RUN node -v
+RUN yarn -v
+RUN cdk --version
 
 # the user we're applying this too (otherwise it most likely install for root)
 USER $USERNAME

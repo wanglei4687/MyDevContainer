@@ -1,0 +1,26 @@
+{
+    "name": "Carrier Node Development",
+    "image": "wanglei4687/devcontainers:node20",
+    "features": {
+      "ghcr.io/devcontainers/features/aws-cli:1": {},
+      "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    "hostRequirements": {
+      "cpus": 4
+    },
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "esbenp.prettier-vscode",
+          "dbaeumer.vscode-eslint",
+          "Gruntfuggly.todo-tree",
+          "circleci.circleci",
+          "atlassian.atlascode",
+          "amazonwebservices.aws-toolkit-vscode"
+        ]
+      }
+    },
+    "mounts": [
+      "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind"
+    ]
+  }
