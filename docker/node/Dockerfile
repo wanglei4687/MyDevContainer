@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM debian:latest
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
@@ -7,33 +7,49 @@ ARG USER_GID=$USER_UID
 ENV TZ=Asia/Shanghai \
         DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt upgrade -y 
-
 RUN groupadd --gid $USER_GID $USERNAME \
-        && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-        && apt-get update \
-        && apt-get install -y sudo wget \
-        && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-        && chmod 0440 /etc/sudoers.d/$USERNAME
+        && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME 
 
-# default env set to node20
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+RUN apt update
 
-RUN apt install -y software-properties-common curl npm \
-        git vim fonts-powerline zsh gnupg2 nodejs ca-certificates \
+RUN apt install -y sudo wget curl software-properties-common \
+        git vim fonts-powerline zsh gnupg2  ca-certificates \
+        apt-transport-https pigz iptables  dirmngr jq \
+        python3-minimal python3-pip libffi-dev python3-venv \
+        build-essential libssl-dev \
         locales \
         # set up locale
         && locale-gen en_US.UTF-8
 
+# default env set to node20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash - 
+RUN apt install -y nodejs
+
+# Set NVM
+RUN mkdir /usr/local/nvm
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_VERSION 10.12.0
+ENV NVM_INSTALL_PATH $NVM_DIR/versions/node/v$NODE_VERSION
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+
+RUN source $NVM_DIR/nvm.sh \
+   && nvm install $NODE_VERSION \
+   && nvm alias default $NODE_VERSION \
+   && nvm use default
+ENV NODE_PATH $NVM_INSTALL_PATH/lib/node_modules
+ENV PATH $NVM_INSTALL_PATH/bin:$PATH
+
+RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+        && chmod 0440 /etc/sudoers.d/$USERNAME
+
 # Clean up
 RUN apt autoremove -y \
-    && apt clean -y \
-    && rm -rf /var/lib/apt/lists/*
+        && apt clean -y \
+        && rm -rf /var/lib/apt/lists/* 
 
 # generate locale for agnoster
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && /usr/sbin/locale-gen
-
-RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 RUN npm install -g aws-cdk yarn
 
@@ -48,7 +64,11 @@ ENV SHELL /bin/zsh
 # set home
 ENV HOME /home/$USERNAME
 
- # run the installation script
+
+# Set the default shell to bash rather than sh
+ENV SHELL /bin/zsh
+
+# run the installation script
 RUN sh -c "$(wget -O- https://install.ohmyz.sh/)"
 
 # install powerlevel10k

@@ -7,21 +7,20 @@ ARG USER_GID=$USER_UID
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt upgrade -y 
-
 RUN groupadd --gid $USER_GID $USERNAME \
-        && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-        && apt-get update \
-        && apt-get install -y sudo wget \
-        && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-        && chmod 0440 /etc/sudoers.d/$USERNAME
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME 
 
-RUN apt install -y software-properties-common curl \
-        python3-dev python3-pip python3-wheel python3-setuptools \
-        python3-ipykernel git vim  fonts-powerline zsh gnupg2\
-        locales \
-        # set up locale
-        && locale-gen en_US.UTF-8
+RUN apt update
+
+RUN apt install -y sudo wget  software-properties-common curl \
+    python3-dev python3-pip python3-wheel python3-setuptools \
+    python3-ipykernel git vim  fonts-powerline zsh gnupg2\
+    locales \
+    # set up locale
+    && locale-gen en_US.UTF-8
+
+RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Clean up
 RUN apt autoremove -y \
@@ -44,7 +43,7 @@ ENV SHELL /bin/zsh
 # set home
 ENV HOME /home/$USERNAME
 
- # run the installation script
+# run the installation script
 RUN sh -c "$(wget -O- https://install.ohmyz.sh/)"
 
 # install powerlevel10k

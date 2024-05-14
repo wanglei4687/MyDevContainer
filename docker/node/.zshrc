@@ -4,6 +4,7 @@
 # Path to your oh-my-zsh installation.
 # Path to your oh-my-zsh installation.
 export ZSH="/home/vscode/.oh-my-zsh"
+export NVM_DIR="/home/vscde/nvm"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -100,6 +101,9 @@ export LANG=en_US.UTF-8
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 alias cargl="export AWS_PROFILE=dev-gl"
 alias carcn="export AWS_PROFILE=dev-cn-cio"

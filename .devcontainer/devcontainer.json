@@ -13,7 +13,6 @@
         "extensions": [
           "esbenp.prettier-vscode",
           "dbaeumer.vscode-eslint",
-          "ms-vscode.vscode-typescript-tslint-plugin",
           "Gruntfuggly.todo-tree",
           "circleci.circleci",
           "atlassian.atlascode"
