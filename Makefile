@@ -8,8 +8,7 @@ SHELL := bash
 
 BUILDX := devcontainers
 
-include make/ml.mk
-include make/node.mk
+include make/build.mk
 
 # create buildx
 .PHONY: create

@@ -5,8 +5,7 @@ channels:
   - pytorch
 dependencies:
   - python>=3.5
+  - pip
   - numpy
   - pandas
   - ipykernel
-  - pytorch
-  - cpuonly

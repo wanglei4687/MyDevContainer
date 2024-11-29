@@ -1,10 +1,11 @@
-FROM nvidia/cuda:12.3.2-cudnn9-devel-ubuntu22.04
+FROM ubuntu:22.04
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-ARG NAME="MLCUDA"
+ARG NAME="kdev"
 ARG SCOPE="DEVCONTAINERS"
+ARG GOVERSION="1.23.3"
 
 LABEL NAME=${NAME}
 LABEL SCOPE=${SCOPE}
@@ -18,29 +19,14 @@ RUN groupadd --gid $USER_GID $USERNAME \
 RUN apt update
 
 # Install dependency
-RUN apt install -y sudo wget  software-properties-common curl libarchive13 \
-    git vim zsh gnupg2 \
+RUN apt install -y sudo wget software-properties-common curl \
+    git vim zsh gnupg2 libssl-dev autoconf libtool\
     locales \
     # set up locale
     && locale-gen en_US.UTF-8
 
-# Install miniconda
-# COPY ml/miniconda.sh /tmp/miniconda.sh
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
-RUN /bin/bash /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh && \
-    echo "export PATH=/opt/conda/bin:$PATH" > /etc/profile.d/conda.sh
-ENV PATH /opt/conda/bin:$PATH
-
-RUN conda init
-
-# Copy environment.yml (if found) to a temp location so we update the environment. Also
-# copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-COPY ml/environment.yml ml/noop.txt /tmp/conda-tmp/
-RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
-    && sudo rm -rf /tmp/conda-tmp
-
-RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+# Install Homebrew linux
+RUN /bin/bash -c "$(curl -fsSL https://ghp.ci/https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
@@ -73,4 +59,9 @@ RUN sh -c "$(wget -O- https://install.ohmyz.sh/)"
 # RUN cd $HOME && curl -fsSLO https://raw.gitmirror.com/romkatv/dotfiles-public/master/.purepower
 
 # zsh configuration
-ADD ml/.zshrc $HOME
+ADD kubernetes/.zshrc $HOME
+
+RUN sudo chown -R ${USERNAME} /home/linuxbrew
+
+COPY kubernetes/init.sh /tmp
+RUN /bin/bash /tmp/init.sh

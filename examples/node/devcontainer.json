@@ -11,8 +11,8 @@
     "vscode": {
       "extensions": [
         "esbenp.prettier-vscode",
+        "bierner.markdown-mermaid",
         "dbaeumer.vscode-eslint",
-        "Gruntfuggly.todo-tree",
         "ms-azuretools.vscode-docker",
         "github.vscode-pull-request-github",
         "Gruntfuggly.todo-tree",

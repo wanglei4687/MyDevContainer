@@ -1,0 +1,28 @@
+{
+  "name": "Kubernetes Development",
+  "image": "wanglei4687/devcontainers:kuber",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    }
+  },
+  "postCreateCommand": ["go --version"],
+  "mounts": [
+    "source=~/.kube/config,target=/root/.kube/config,type=bind,consistency=cached"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "golang.go",
+        "bierner.markdown-mermaid",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-pull-request-github",
+        "ms-vscode.makefile-tools",
+        "Gruntfuggly.todo-tree",
+        "ms-kubernetes-tools.vscode-kubernetes-tools"
+      ]
+    }
+  }
+}

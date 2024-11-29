@@ -100,3 +100,13 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Custom dev env
+export PATH=$PATH:/usr/local/go/bin
+
+# Custom Alias
+alias k='kubectl'
+alias getpods="kubectl get po --all-namespaces"
+alias watchpod="watch kubectl get po --all-namespaces"
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
