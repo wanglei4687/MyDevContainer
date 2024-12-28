@@ -74,3 +74,5 @@ RUN sh -c "$(wget -O- https://install.ohmyz.sh/)"
 
 # zsh configuration
 ADD ml/.zshrc $HOME
+
+RUN /bin/bash -c "$(curl -fsSL https://ghp.ci/https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
