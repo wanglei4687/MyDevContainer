@@ -20,13 +20,10 @@ RUN apt update
 
 # Install dependency
 RUN apt install -y sudo wget software-properties-common curl \
-    git vim zsh gnupg2 libssl-dev autoconf libtool\
+    git vim zsh gnupg2 libssl-dev autoconf libtool iputils-ping netcat-openbsd\
     locales \
     # set up locale
     && locale-gen en_US.UTF-8
-
-# Install Homebrew linux
-RUN /bin/bash -c "$(curl -fsSL https://ghp.ci/https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
@@ -61,7 +58,5 @@ RUN sh -c "$(wget -O- https://install.ohmyz.sh/)"
 # zsh configuration
 ADD kubernetes/.zshrc $HOME
 
-RUN sudo chown -R ${USERNAME} /home/linuxbrew
-
 COPY kubernetes/init.sh /tmp
-RUN /bin/bash /tmp/init.sh
+RUN /bin/bash /tmp/init.sh ${GOVERSION}
