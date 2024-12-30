@@ -27,21 +27,22 @@ RUN apt install -y sudo wget  software-properties-common curl libarchive13 \
 # Install miniconda
 # COPY ml/miniconda.sh /tmp/miniconda.sh
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
-RUN /bin/bash /tmp/miniconda.sh -b -p /opt/conda && \
+RUN /bin/bash /tmp/miniconda.sh -b -p /home/conda && \
     rm /tmp/miniconda.sh && \
-    echo "export PATH=/opt/conda/bin:$PATH" > /etc/profile.d/conda.sh
-ENV PATH /opt/conda/bin:$PATH
+    echo "export PATH=/home/conda/bin:$PATH" > /etc/profile.d/conda.sh
+ENV PATH /home/conda/bin:$PATH
 
 RUN conda init
 
 # Copy environment.yml (if found) to a temp location so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
 COPY ml/environment.yml ml/noop.txt /tmp/conda-tmp/
-RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
+RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /home/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
     && sudo rm -rf /tmp/conda-tmp
 
 RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 
+# https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
 RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
@@ -75,4 +76,4 @@ RUN sh -c "$(wget -O- https://install.ohmyz.sh/)"
 # zsh configuration
 ADD ml/.zshrc $HOME
 
-RUN /bin/bash -c "$(curl -fsSL https://ghp.ci/https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+RUN /bin/bash -c "$(curl -fsSL  https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
