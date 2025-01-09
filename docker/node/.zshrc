@@ -104,8 +104,3 @@ export LANG=en_US.UTF-8
 
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-alias cargl="export AWS_PROFILE=dev-gl"
-alias carcn="export AWS_PROFILE=dev-cn-cio"
-alias logingl="aws sso login --profile=dev-gl"
-alias logincn="aws sso login --profile=dev-cn-cio"
