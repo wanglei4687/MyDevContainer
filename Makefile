@@ -8,7 +8,12 @@ SHELL := bash
 
 BUILDX := devcontainers
 
-include make/build.mk
+# Global Variables
+PLATFORM ?= linux/amd64
+CROSSPLATFORM ?= linux/amd64,linux/arm64
+CONTEXT := docker
+
+include make/*
 
 # create buildx
 .PHONY: create
