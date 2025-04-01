@@ -15,3 +15,11 @@
 ## Proxy
 
 - [github proxy](https://ghgo.xyz/)
+
+## Test
+
+docker gpu support
+
+```shell
+sudo docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi
+```
